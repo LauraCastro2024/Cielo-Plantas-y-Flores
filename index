@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cielo Plantas y Flores — Floristería familiar</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Karla:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F4F6EF;
+    --card:#FFFFFF;
+    --ink:#22301F;
+    --muted:#65755F;
+    --green:#2F6B45;
+    --green-dark:#1C3A29;
+    --green-soft:#E3EDDF;
+    --accent:#C22E2A;
+    --accent-soft:#F9E5E4;
+    --radius:14px;
+    --shadow:0 2px 10px rgba(34,48,31,.08);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto}
+    *,*::before,*::after{animation:none!important;transition:none!important}
+  }
+  body{
+    font-family:'Karla',sans-serif;
+    background:var(--paper);
+    color:var(--ink);
+    line-height:1.6;
+  }
+  a{color:inherit}
+  button{font-family:inherit;cursor:pointer}
+  :focus-visible{outline:3px solid var(--accent);outline-offset:2px;border-radius:4px}
+
+  /* ---------- Header ---------- */
+  header{
+    position:sticky;top:0;z-index:50;
+    background:rgba(244,246,239,.92);
+    backdrop-filter:blur(6px);
+    border-bottom:1px solid #DDE4D6;
+  }
+  .nav{
+    max-width:1100px;margin:0 auto;padding:14px 20px;
+    display:flex;align-items:center;justify-content:space-between;gap:16px;
+  }
+  .logo{
+    font-family:'Fraunces',serif;font-size:1.35rem;font-weight:600;
+    color:var(--green-dark);text-decoration:none;display:flex;align-items:center;gap:8px;
+  }
+  .logo svg{width:26px;height:26px}
+  .nav-links{display:flex;gap:22px;list-style:none;font-weight:500;font-size:.95rem}
+  .nav-links a{text-decoration:none;color:var(--muted)}
+  .nav-links a:hover{color:var(--green-dark)}
+  @media(max-width:640px){.nav-links{display:none}}
+
+  /* ---------- Hero ---------- */
+  .hero{
+    max-width:1100px;margin:0 auto;padding:56px 20px 40px;
+    display:grid;grid-template-columns:1.2fr .8fr;gap:32px;align-items:center;
+  }
+  @media(max-width:760px){.hero{grid-template-columns:1fr;padding-top:36px}}
+  .hero h1{
+    font-family:'Fraunces',serif;font-weight:600;
+    font-size:clamp(2rem,5vw,3.1rem);line-height:1.12;color:var(--green-dark);
+  }
+  .hero h1 em{font-style:italic;color:var(--green)}
+  .hero p{margin-top:14px;color:var(--muted);max-width:46ch}
+  .hero-actions{margin-top:24px;display:flex;gap:12px;flex-wrap:wrap}
+  .btn{
+    display:inline-flex;align-items:center;gap:8px;
+    padding:11px 20px;border-radius:999px;border:none;
+    font-weight:700;font-size:.95rem;text-decoration:none;
+    transition:transform .15s ease, background .15s ease;
+  }
+  .btn:hover{transform:translateY(-1px)}
+  .btn-primary{background:var(--green);color:#fff}
+  .btn-primary:hover{background:var(--green-dark)}
+  .btn-ghost{background:transparent;color:var(--green-dark);border:1.5px solid var(--green)}
+  .hero-art{
+    background:var(--green-soft);border-radius:24px;padding:24px;
+    display:flex;align-items:center;justify-content:center;min-height:220px;
+  }
+  .hero-art svg{width:80%;max-width:260px;height:auto}
+
+  /* ---------- Filtros ---------- */
+  .catalog{max-width:1100px;margin:0 auto;padding:24px 20px 60px}
+  .catalog h2, .tips h2, .contact h2{
+    font-family:'Fraunces',serif;font-weight:600;font-size:1.7rem;color:var(--green-dark);
+  }
+  .filters{
+    margin:18px 0 8px;display:flex;gap:8px;flex-wrap:wrap;align-items:center;
+  }
+  .chip{
+    padding:7px 16px;border-radius:999px;border:1.5px solid #CBD6C3;
+    background:#fff;color:var(--muted);font-weight:500;font-size:.9rem;
+    transition:all .15s ease;
+  }
+  .chip:hover{border-color:var(--green)}
+  .chip.active{background:var(--green);border-color:var(--green);color:#fff}
+  .search{
+    margin-left:auto;padding:8px 14px;border-radius:999px;
+    border:1.5px solid #CBD6C3;background:#fff;font-family:inherit;font-size:.9rem;
+    min-width:180px;
+  }
+  @media(max-width:640px){.search{margin-left:0;width:100%}}
+
+  /* ---------- Cards ---------- */
+  .grid{
+    margin-top:20px;display:grid;gap:20px;
+    grid-template-columns:repeat(auto-fill,minmax(240px,1fr));
+  }
+  .plant-card{
+    background:var(--card);border-radius:var(--radius);overflow:hidden;
+    box-shadow:var(--shadow);display:flex;flex-direction:column;
+    transition:transform .15s ease, box-shadow .15s ease;
+  }
+  .plant-card:hover{transform:translateY(-3px);box-shadow:0 6px 18px rgba(34,48,31,.13)}
+  .plant-photo{
+    height:150px;display:flex;align-items:center;justify-content:center;
+  }
+  .plant-photo svg{width:84px;height:84px}
+  .plant-body{padding:16px 16px 18px;display:flex;flex-direction:column;gap:8px;flex:1}
+  .plant-name{font-family:'Fraunces',serif;font-weight:600;font-size:1.15rem;color:var(--green-dark)}
+  .plant-sci{font-size:.82rem;font-style:italic;color:var(--muted);margin-top:-6px}
+
+  /* Etiquetas de maceta: la firma visual */
+  .care-tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:2px}
+  .tag{
+    display:inline-flex;align-items:center;gap:5px;
+    font-size:.75rem;font-weight:700;color:var(--green-dark);
+    background:var(--green-soft);border-radius:6px;padding:4px 9px 4px 7px;
+    position:relative;
+  }
+  .tag::before{
+    content:"";width:5px;height:5px;border-radius:50%;
+    background:var(--paper);border:1px solid #B9C9B0;flex:none;
+  }
+  .tag.warn{background:var(--accent-soft);color:#8C1F1C}
+
+  .plant-foot{
+    margin-top:auto;display:flex;align-items:center;justify-content:space-between;gap:10px;
+    padding-top:10px;
+  }
+  .price-tag{
+    font-family:'Fraunces',serif;font-weight:600;font-size:1.15rem;color:var(--ink);
+  }
+  .price-tag small{font-family:'Karla',sans-serif;font-size:.72rem;font-weight:700;color:var(--muted);display:block;line-height:1}
+  .stock{font-size:.75rem;font-weight:700}
+  .stock.ok{color:var(--green)}
+  .stock.low{color:#B4690E}
+  .stock.out{color:#A33B2B}
+  .add-btn{
+    border:none;background:var(--green);color:#fff;border-radius:999px;
+    width:38px;height:38px;font-size:1.3rem;line-height:1;font-weight:700;
+    transition:background .15s ease;flex:none;
+  }
+  .add-btn:hover{background:var(--green-dark)}
+  .add-btn:disabled{background:#C6CFC0;cursor:not-allowed}
+
+  /* ---------- Tips ---------- */
+  .tips{background:var(--green-dark);color:#EAF1E6;padding:48px 20px}
+  .tips-inner{max-width:1100px;margin:0 auto}
+  .tips h2{color:#fff}
+  .tips-grid{margin-top:22px;display:grid;gap:20px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+  .tip{background:rgba(255,255,255,.07);border-radius:var(--radius);padding:20px}
+  .tip h3{font-family:'Fraunces',serif;font-weight:600;font-size:1.05rem;color:#F0B9B7;margin-bottom:6px}
+  .tip p{font-size:.92rem;color:#D5E0CF}
+
+  /* ---------- Contacto ---------- */
+  .contact{max-width:1100px;margin:0 auto;padding:52px 20px 64px}
+  .contact-grid{margin-top:20px;display:grid;gap:24px;grid-template-columns:1fr 1fr}
+  @media(max-width:700px){.contact-grid{grid-template-columns:1fr}}
+  .contact-card{background:var(--card);border-radius:var(--radius);padding:24px;box-shadow:var(--shadow)}
+  .contact-card h3{font-family:'Fraunces',serif;font-weight:600;color:var(--green-dark);margin-bottom:10px}
+  .contact-card p{color:var(--muted);font-size:.95rem;margin-bottom:6px}
+  .contact-card strong{color:var(--ink)}
+
+  footer{padding:22px 20px 34px;text-align:center;color:var(--muted);font-size:.85rem}
+
+  /* ---------- Carrito ---------- */
+  .cart-fab{
+    position:fixed;right:18px;bottom:18px;z-index:60;
+    background:var(--green-dark);color:#fff;border:none;border-radius:999px;
+    padding:13px 20px;font-weight:700;font-size:.95rem;
+    display:flex;align-items:center;gap:9px;box-shadow:0 6px 18px rgba(28,58,41,.35);
+  }
+  .cart-fab .count{
+    background:var(--accent);color:#fff;border-radius:999px;
+    min-width:22px;height:22px;display:inline-flex;align-items:center;justify-content:center;
+    font-size:.8rem;padding:0 6px;
+  }
+  .cart-panel{
+    position:fixed;right:18px;bottom:78px;z-index:60;width:min(340px,calc(100vw - 36px));
+    background:#fff;border-radius:16px;box-shadow:0 12px 34px rgba(28,58,41,.28);
+    padding:18px;display:none;
+  }
+  .cart-panel.open{display:block}
+  .cart-panel h3{font-family:'Fraunces',serif;color:var(--green-dark);margin-bottom:10px}
+  .cart-item{display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid #EEF1EA;font-size:.9rem}
+  .cart-item .n{flex:1}
+  .qty-btn{border:1px solid #CBD6C3;background:#fff;border-radius:6px;width:24px;height:24px;font-weight:700}
+  .cart-total{display:flex;justify-content:space-between;font-weight:700;margin:12px 0;font-size:1rem}
+  .cart-empty{color:var(--muted);font-size:.9rem;padding:10px 0}
+  .wa-btn{
+    width:100%;border:none;background:#25D366;color:#0B3D1F;border-radius:999px;
+    padding:12px;font-weight:700;font-size:.95rem;
+  }
+  .wa-btn:hover{background:#1FBF5B}
+</style>
+</head>
+<body>
+
+<!-- Símbolos SVG reutilizables (siluetas de plantas por categoría) -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="leaf-interior" viewBox="0 0 64 64">
+      <path d="M32 58V30" stroke="currentColor" stroke-width="3" stroke-linecap="round" fill="none"/>
+      <path d="M32 34C18 34 10 24 10 10c14 0 22 10 22 24Z" fill="currentColor" opacity=".85"/>
+      <path d="M32 26C46 26 54 18 54 6 40 6 32 14 32 26Z" fill="currentColor" opacity=".55"/>
+    </symbol>
+    <symbol id="leaf-suculenta" viewBox="0 0 64 64">
+      <ellipse cx="32" cy="40" rx="7" ry="16" fill="currentColor"/>
+      <ellipse cx="20" cy="42" rx="6" ry="13" transform="rotate(-28 20 42)" fill="currentColor" opacity=".7"/>
+      <ellipse cx="44" cy="42" rx="6" ry="13" transform="rotate(28 44 42)" fill="currentColor" opacity=".7"/>
+      <ellipse cx="12" cy="48" rx="5" ry="9" transform="rotate(-52 12 48)" fill="currentColor" opacity=".45"/>
+      <ellipse cx="52" cy="48" rx="5" ry="9" transform="rotate(52 52 48)" fill="currentColor" opacity=".45"/>
+    </symbol>
+    <symbol id="leaf-aromatica" viewBox="0 0 64 64">
+      <path d="M32 58V14" stroke="currentColor" stroke-width="3" stroke-linecap="round" fill="none"/>
+      <ellipse cx="24" cy="22" rx="7" ry="3.4" transform="rotate(-30 24 22)" fill="currentColor"/>
+      <ellipse cx="40" cy="22" rx="7" ry="3.4" transform="rotate(30 40 22)" fill="currentColor"/>
+      <ellipse cx="23" cy="34" rx="7" ry="3.4" transform="rotate(-30 23 34)" fill="currentColor" opacity=".75"/>
+      <ellipse cx="41" cy="34" rx="7" ry="3.4" transform="rotate(30 41 34)" fill="currentColor" opacity=".75"/>
+      <ellipse cx="24" cy="46" rx="7" ry="3.4" transform="rotate(-30 24 46)" fill="currentColor" opacity=".5"/>
+      <ellipse cx="40" cy="46" rx="7" ry="3.4" transform="rotate(30 40 46)" fill="currentColor" opacity=".5"/>
+    </symbol>
+    <symbol id="leaf-frutal" viewBox="0 0 64 64">
+      <path d="M32 58V34" stroke="currentColor" stroke-width="3" stroke-linecap="round" fill="none"/>
+      <circle cx="32" cy="22" r="16" fill="currentColor" opacity=".8"/>
+      <circle cx="24" cy="30" r="4" fill="#fff" opacity=".85"/>
+      <circle cx="40" cy="18" r="4" fill="#fff" opacity=".85"/>
+    </symbol>
+    <symbol id="leaf-flor" viewBox="0 0 64 64">
+      <path d="M32 58V32" stroke="currentColor" stroke-width="3" stroke-linecap="round" fill="none"/>
+      <ellipse cx="32" cy="14" rx="5" ry="9" fill="currentColor" opacity=".85"/>
+      <ellipse cx="20" cy="22" rx="5" ry="9" transform="rotate(-60 20 22)" fill="currentColor" opacity=".7"/>
+      <ellipse cx="44" cy="22" rx="5" ry="9" transform="rotate(60 44 22)" fill="currentColor" opacity=".7"/>
+      <ellipse cx="23" cy="33" rx="5" ry="9" transform="rotate(-115 23 33)" fill="currentColor" opacity=".55"/>
+      <ellipse cx="41" cy="33" rx="5" ry="9" transform="rotate(115 41 33)" fill="currentColor" opacity=".55"/>
+      <circle cx="32" cy="24" r="4.5" fill="#C22E2A"/>
+    </symbol>
+    <symbol id="leaf-exterior" viewBox="0 0 64 64">
+      <path d="M32 58V28" stroke="currentColor" stroke-width="3" stroke-linecap="round" fill="none"/>
+      <circle cx="32" cy="20" r="6" fill="currentColor"/>
+      <circle cx="22" cy="26" r="6" fill="currentColor" opacity=".75"/>
+      <circle cx="42" cy="26" r="6" fill="currentColor" opacity=".75"/>
+      <circle cx="27" cy="14" r="6" fill="currentColor" opacity=".6"/>
+      <circle cx="37" cy="14" r="6" fill="currentColor" opacity=".6"/>
+    </symbol>
+  </defs>
+</svg>
+
+<header>
+  <nav class="nav" aria-label="Principal">
+    <a class="logo" href="#">
+      <img src="data:image/jpeg;base64,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" alt="" width="34" height="34" style="border-radius:50%">
+      Cielo Plantas y Flores
+    </a>
+    <ul class="nav-links">
+      <li><a href="#catalogo">Catálogo</a></li>
+      <li><a href="#cuidados">Cuidados</a></li>
+      <li><a href="#contacto">Contacto</a></li>
+    </ul>
+  </nav>
+</header>
+
+<section class="hero">
+  <div>
+    <h1>Plantas y flores criadas <em>en familia</em>, para tu casa y tu jardín</h1>
+    <p>Somos un emprendimiento familiar. Catálogo actualizado con precios y disponibilidad real: elegí tus plantas o flores, armá el pedido y confirmalo por WhatsApp. Retirás en la floristería o coordinamos entrega.</p>
+    <div class="hero-actions">
+      <a class="btn btn-primary" href="#catalogo">Ver catálogo</a>
+      <a class="btn btn-ghost" href="#contacto">Cómo llegar</a>
+    </div>
+  </div>
+  <div class="hero-art" aria-hidden="true">
+    <img src="data:image/jpeg;base64,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" alt="" style="width:70%;max-width:220px;border-radius:24px">
+  </div>
+</section>
+
+<main class="catalog" id="catalogo">
+  <h2>Catálogo</h2>
+  <div class="filters" role="group" aria-label="Filtrar por categoría">
+    <button class="chip active" data-cat="todas">Todas</button>
+    <button class="chip" data-cat="Interior">Interior</button>
+    <button class="chip" data-cat="Suculentas">Suculentas</button>
+    <button class="chip" data-cat="Aromáticas">Aromáticas</button>
+    <button class="chip" data-cat="Frutales">Frutales</button>
+    <button class="chip" data-cat="Flores">Flores</button>
+    <button class="chip" data-cat="Exterior">Exterior</button>
+    <input class="search" type="search" id="search" placeholder="Buscar planta..." aria-label="Buscar planta">
+  </div>
+  <div class="grid" id="grid"></div>
+</main>
+
+<section class="tips" id="cuidados">
+  <div class="tips-inner">
+    <h2>Consejos de la familia</h2>
+    <div class="tips-grid">
+      <div class="tip">
+        <h3>Riego en invierno</h3>
+        <p>La mayoría de las plantas de interior necesitan la mitad del riego en los meses fríos. Tocá la tierra: si está húmeda a 2 cm, esperá.</p>
+      </div>
+      <div class="tip">
+        <h3>Luz del litoral</h3>
+        <p>El sol de la tarde en verano quema hojas sensibles. Las plantas de "media sombra" van mejor con luz de mañana.</p>
+      </div>
+      <div class="tip">
+        <h3>Trasplante</h3>
+        <p>Si las raíces asoman por abajo de la maceta, es hora de una más grande. Ideal hacerlo en primavera. Te asesoramos sin cargo.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="contact" id="contacto">
+  <h2>Contacto y horarios</h2>
+  <div class="contact-grid">
+    <div class="contact-card">
+      <h3>Dónde estamos</h3>
+      <p><strong>Dirección:</strong> Dirección de ejemplo 123, Fray Bentos</p>
+      <p><strong>WhatsApp:</strong> 099 123 456</p>
+      <p><strong>Instagram:</strong> @cieloplantasyflores</p>
+    </div>
+    <div class="contact-card">
+      <h3>Horarios</h3>
+      <p><strong>Lunes a viernes:</strong> 8:30 a 12:00 y 15:00 a 19:00</p>
+      <p><strong>Sábados:</strong> 8:30 a 13:00</p>
+      <p><strong>Domingos:</strong> cerrado</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  Cielo Plantas y Flores · Emprendimiento familiar · Fray Bentos, Río Negro · Prototipo de demostración
+</footer>
+
+<!-- Carrito flotante -->
+<div class="cart-panel" id="cartPanel" aria-label="Tu pedido">
+  <h3>Tu pedido</h3>
+  <div id="cartItems"></div>
+  <div class="cart-total" id="cartTotal" hidden><span>Total</span><span id="totalAmount"></span></div>
+  <button class="wa-btn" id="waSend" hidden>Enviar pedido por WhatsApp</button>
+</div>
+<button class="cart-fab" id="cartFab" aria-expanded="false" aria-controls="cartPanel">
+  Pedido <span class="count" id="cartCount">0</span>
+</button>
+
+<script>
+// ====== CONFIGURACIÓN ======
+// Reemplazá por el número real del vivero, con código de país y sin símbolos.
+// Ejemplo Uruguay: 59899123456
+const WHATSAPP = "59899123456";
+
+// ====== DATOS DE EJEMPLO ======
+// En la versión real, esto viene de la base de datos (Supabase).
+const CATS = {
+  "Interior":   { color:"#2F6B45", bg:"#E3EDDF", icon:"#leaf-interior" },
+  "Suculentas": { color:"#4E7A3A", bg:"#EAF0DC", icon:"#leaf-suculenta" },
+  "Aromáticas": { color:"#6E5FA8", bg:"#EAE6F4", icon:"#leaf-aromatica" },
+  "Frutales":   { color:"#C77A2E", bg:"#F8ECDA", icon:"#leaf-frutal" },
+  "Flores":     { color:"#C22E2A", bg:"#F9E5E4", icon:"#leaf-flor" },
+  "Exterior":   { color:"#B85578", bg:"#F7E6EC", icon:"#leaf-exterior" }
+};
+
+const PLANTAS = [
+  { id:1, nombre:"Monstera deliciosa", cientifico:"Monstera deliciosa", precio:890,  stock:6,  cat:"Interior",   luz:"Luz indirecta", riego:"Riego medio",  mascotas:false },
+  { id:2, nombre:"Potus",              cientifico:"Epipremnum aureum",  precio:350,  stock:14, cat:"Interior",   luz:"Media sombra",  riego:"Riego bajo",   mascotas:false },
+  { id:3, nombre:"Echeveria",          cientifico:"Echeveria elegans",  precio:220,  stock:20, cat:"Suculentas", luz:"Sol pleno",     riego:"Riego bajo",   mascotas:true  },
+  { id:4, nombre:"Aloe vera",          cientifico:"Aloe barbadensis",   precio:280,  stock:9,  cat:"Suculentas", luz:"Sol pleno",     riego:"Riego bajo",   mascotas:false },
+  { id:5, nombre:"Lavanda",            cientifico:"Lavandula angustifolia", precio:320, stock:3, cat:"Aromáticas", luz:"Sol pleno",   riego:"Riego medio",  mascotas:false },
+  { id:6, nombre:"Romero",             cientifico:"Salvia rosmarinus",  precio:300,  stock:11, cat:"Aromáticas", luz:"Sol pleno",     riego:"Riego bajo",   mascotas:true  },
+  { id:7, nombre:"Limonero 4 estaciones", cientifico:"Citrus limon",    precio:1500, stock:0,  cat:"Frutales",   luz:"Sol pleno",     riego:"Riego alto",   mascotas:true  },
+  { id:8, nombre:"Santa Rita",         cientifico:"Bougainvillea glabra", precio:750, stock:5, cat:"Exterior",   luz:"Sol pleno",     riego:"Riego medio",  mascotas:false },
+  { id:9, nombre:"Rosa en maceta",     cientifico:"Rosa spp.",          precio:520,  stock:8,  cat:"Flores",     luz:"Sol pleno",     riego:"Riego medio",  mascotas:true  },
+  { id:10, nombre:"Alegría del hogar", cientifico:"Impatiens walleriana", precio:180, stock:16, cat:"Flores",    luz:"Media sombra",  riego:"Riego alto",   mascotas:true  },
+  { id:11, nombre:"Ramo de estación",  cientifico:"Flores de corte variadas", precio:650, stock:4, cat:"Flores", luz:"Flor de corte", riego:"Agua fresca",  mascotas:true  }
+];
+
+// ====== ESTADO ======
+let filtroCat = "todas";
+let busqueda = "";
+const carrito = new Map(); // id -> cantidad
+
+// ====== RENDER DEL CATÁLOGO ======
+const grid = document.getElementById("grid");
+const fmt = n => "$U " + n.toLocaleString("es-UY");
+
+function stockLabel(s){
+  if(s === 0) return '<span class="stock out">Sin stock</span>';
+  if(s <= 3)  return '<span class="stock low">Últimas ' + s + '</span>';
+  return '<span class="stock ok">Disponible</span>';
+}
+
+function render(){
+  const q = busqueda.trim().toLowerCase();
+  const lista = PLANTAS.filter(p =>
+    (filtroCat === "todas" || p.cat === filtroCat) &&
+    (q === "" || p.nombre.toLowerCase().includes(q) || p.cientifico.toLowerCase().includes(q))
+  );
+  if(lista.length === 0){
+    grid.innerHTML = '<p style="color:var(--muted)">No encontramos plantas con ese criterio. Probá otra búsqueda o consultanos por WhatsApp: seguro la conseguimos.</p>';
+    return;
+  }
+  grid.innerHTML = lista.map(p => {
+    const c = CATS[p.cat];
+    const tags = [
+      '<span class="tag">' + p.luz + '</span>',
+      '<span class="tag">' + p.riego + '</span>',
+      p.mascotas ? '<span class="tag">Apta mascotas</span>' : '<span class="tag warn">Tóxica p/ mascotas</span>'
+    ].join("");
+    return `
+    <article class="plant-card">
+      <div class="plant-photo" style="background:${c.bg}" aria-hidden="true">
+        <svg viewBox="0 0 64 64" style="color:${c.color}"><use href="${c.icon}"/></svg>
+      </div>
+      <div class="plant-body">
+        <h3 class="plant-name">${p.nombre}</h3>
+        <p class="plant-sci">${p.cientifico}</p>
+        <div class="care-tags">${tags}</div>
+        <div class="plant-foot">
+          <div class="price-tag"><small>Precio</small>${fmt(p.precio)}</div>
+          ${stockLabel(p.stock)}
+          <button class="add-btn" data-id="${p.id}" ${p.stock===0?"disabled":""}
+            aria-label="Agregar ${p.nombre} al pedido">+</button>
+        </div>
+      </div>
+    </article>`;
+  }).join("");
+}
+
+// ====== FILTROS ======
+document.querySelectorAll(".chip").forEach(ch => {
+  ch.addEventListener("click", () => {
+    document.querySelectorAll(".chip").forEach(x => x.classList.remove("active"));
+    ch.classList.add("active");
+    filtroCat = ch.dataset.cat;
+    render();
+  });
+});
+document.getElementById("search").addEventListener("input", e => {
+  busqueda = e.target.value;
+  render();
+});
+
+// ====== CARRITO ======
+const panel = document.getElementById("cartPanel");
+const fab = document.getElementById("cartFab");
+const cartItems = document.getElementById("cartItems");
+const cartCount = document.getElementById("cartCount");
+const cartTotal = document.getElementById("cartTotal");
+const totalAmount = document.getElementById("totalAmount");
+const waSend = document.getElementById("waSend");
+
+grid.addEventListener("click", e => {
+  const btn = e.target.closest(".add-btn");
+  if(!btn) return;
+  const id = Number(btn.dataset.id);
+  carrito.set(id, (carrito.get(id) || 0) + 1);
+  renderCart();
+  panel.classList.add("open");
+  fab.setAttribute("aria-expanded","true");
+});
+
+fab.addEventListener("click", () => {
+  const open = panel.classList.toggle("open");
+  fab.setAttribute("aria-expanded", open);
+});
+
+function renderCart(){
+  let total = 0, count = 0, html = "";
+  for(const [id, qty] of carrito){
+    const p = PLANTAS.find(x => x.id === id);
+    total += p.precio * qty;
+    count += qty;
+    html += `
+      <div class="cart-item">
+        <span class="n">${p.nombre}</span>
+        <button class="qty-btn" data-id="${id}" data-d="-1" aria-label="Quitar uno">−</button>
+        <span>${qty}</span>
+        <button class="qty-btn" data-id="${id}" data-d="1" aria-label="Agregar uno">+</button>
+        <span style="min-width:64px;text-align:right">${fmt(p.precio*qty)}</span>
+      </div>`;
+  }
+  cartItems.innerHTML = html || '<p class="cart-empty">Todavía no agregaste plantas. Tocá el + en cualquier planta del catálogo.</p>';
+  cartCount.textContent = count;
+  cartTotal.hidden = count === 0;
+  waSend.hidden = count === 0;
+  totalAmount.textContent = fmt(total);
+}
+
+cartItems.addEventListener("click", e => {
+  const btn = e.target.closest(".qty-btn");
+  if(!btn) return;
+  const id = Number(btn.dataset.id);
+  const next = (carrito.get(id) || 0) + Number(btn.dataset.d);
+  if(next <= 0) carrito.delete(id); else carrito.set(id, next);
+  renderCart();
+});
+
+waSend.addEventListener("click", () => {
+  let msg = "¡Hola! Quiero hacer este pedido:\n";
+  let total = 0;
+  for(const [id, qty] of carrito){
+    const p = PLANTAS.find(x => x.id === id);
+    msg += `• ${qty} x ${p.nombre} — ${fmt(p.precio*qty)}\n`;
+    total += p.precio * qty;
+  }
+  msg += `Total: ${fmt(total)}\n¿Está disponible para retirar?`;
+  window.open("https://wa.me/" + WHATSAPP + "?text=" + encodeURIComponent(msg), "_blank");
+});
+
+render();
+renderCart();
+</script>
+</body>
+</html>
